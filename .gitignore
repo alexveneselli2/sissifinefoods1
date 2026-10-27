@@ -1,0 +1,7 @@
+node_modules/
+dist/
+.DS_Store
+# export di Tilby e fogli di lavoro: contengono costi e dati riservati
+*.xlsx
+*.xls
+*.csv
