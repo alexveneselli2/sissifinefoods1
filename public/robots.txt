@@ -1,0 +1,3 @@
+# Strumento interno di Sissi Fine Foods: niente indicizzazione.
+User-agent: *
+Disallow: /

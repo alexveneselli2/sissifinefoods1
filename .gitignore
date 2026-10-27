@@ -5,3 +5,7 @@ dist/
 *.xlsx
 *.xls
 *.csv
+screenshot/
+test-results/
+playwright-report/
+lighthouse/

@@ -1,0 +1,708 @@
+/* Abbinamenti · Sissi Fine Foods
+   Identità: verde Sissi, oro, panna. Titoli in Bodoni Moda, etichette in maiuscoletto
+   Cormorant Garamond, testo in Figtree. Niente gradienti, niente ombre pesanti. */
+
+:root {
+  --verde: #1F3A2E;
+  --verde-scuro: #16291F;
+  --oro: #C9A961;
+  --panna: #F5F0E8;
+  --bianco: #FFFFFF;
+  --oro-scuro: #7A5F24;
+
+  /* tema chiaro (banco) */
+  --fondo: var(--panna);
+  --superficie: var(--bianco);
+  --inchiostro: var(--verde);
+  --tenue: #556859;               /* verde 75% su panna: 5,3:1 */
+  --accento: var(--oro-scuro);    /* testo di accento su fondo chiaro */
+  --filetto: #D9C8A0;             /* oro schiarito: solo linee */
+  --linea: #E4DCCB;
+  --fuoco: var(--oro-scuro);
+
+  --chip-cibo-fondo: var(--bianco);
+  --chip-cibo-bordo: #DCD3C1;
+  --chip-bevanda-fondo: #DAE3D9;  /* tono verde: 9:1 con il testo */
+  --chip-bevanda-bordo: #B2C4B4;
+  --chip-evitare-fondo: #EEE6D6;  /* oro scuro 10% su panna */
+  --chip-evitare-bordo: #D8C9A6;
+  --evitare-fondo: #F8F2E6;
+
+  --f-titoli: 'Bodoni Moda', 'Bodoni 72', Didot, Georgia, serif;
+  --f-maiuscoletto: 'Cormorant Garamond', Garamond, Georgia, serif;
+  --f-testo: 'Figtree', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+
+  --margine: max(16px, env(safe-area-inset-left, 0px));
+  --margine-d: max(16px, env(safe-area-inset-right, 0px));
+  --raggio: 3px;
+  --colonna: 320px;
+
+  --angolo-tl: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 18 18'%3E%3Cpath d='M.6 18V6.5L6.5.6H18' fill='none' stroke='%23C9A961' stroke-width='1.2'/%3E%3C/svg%3E");
+  --angolo-tr: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 18 18'%3E%3Cpath d='M0 .6h11.5l5.9 5.9V18' fill='none' stroke='%23C9A961' stroke-width='1.2'/%3E%3C/svg%3E");
+  --angolo-br: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 18 18'%3E%3Cpath d='M17.4 0v11.5l-5.9 5.9H0' fill='none' stroke='%23C9A961' stroke-width='1.2'/%3E%3C/svg%3E");
+  --angolo-bl: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 18 18'%3E%3Cpath d='M18 17.4H6.5L.6 11.5V0' fill='none' stroke='%23C9A961' stroke-width='1.2'/%3E%3C/svg%3E");
+
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --fondo: var(--verde-scuro);
+    --superficie: #1B3328;
+    --inchiostro: var(--panna);
+    --tenue: #C4C4BC;
+    --accento: var(--oro);
+    --filetto: #5E5F3F;
+    --linea: #2E4A3C;
+    --fuoco: var(--oro);
+
+    --chip-cibo-fondo: #22392E;
+    --chip-cibo-bordo: #3A5446;
+    --chip-bevanda-fondo: #2A4C3D;
+    --chip-bevanda-bordo: #3F6553;
+    --chip-evitare-fondo: #3A4C36;  /* oro 16% su verde */
+    --chip-evitare-bordo: #5A6346;
+    --evitare-fondo: #20372B;
+
+    color-scheme: dark;
+  }
+}
+
+/* ---------- base ---------- */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  background: var(--verde);
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  min-height: 100dvh;
+  background: var(--fondo);
+  color: var(--inchiostro);
+  font: 400 16px/1.5 var(--f-testo);
+  overflow-x: hidden;
+  -webkit-tap-highlight-color: transparent;
+}
+
+a { color: inherit; }
+button { font: inherit; color: inherit; }
+h1, h2, h3, p, ul { margin: 0; }
+ul { padding: 0; list-style: none; }
+img, svg { display: block; }
+
+:focus-visible {
+  outline: 2px solid var(--fuoco);
+  outline-offset: 2px;
+}
+[tabindex="-1"]:focus { outline: none; }
+
+.sr {
+  position: absolute;
+  width: 1px; height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.salta {
+  position: absolute;
+  z-index: 50;
+  left: var(--margine);
+  top: calc(env(safe-area-inset-top, 0px) + 8px);
+  padding: 10px 16px;
+  background: var(--panna);
+  color: var(--verde);
+  font-weight: 600;
+  transform: translateY(-200%);
+}
+.salta:focus { transform: none; }
+
+.etichetta,
+.etichetta-campo,
+.scorciatoie-etichetta,
+.tipo,
+.kit-etichetta,
+.perche-etichetta {
+  font-family: var(--f-maiuscoletto);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .2em;
+}
+
+.etichetta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 15px;
+  line-height: 1.2;
+  color: var(--accento);
+}
+
+/* sole a raggi */
+.sole { width: 32px; height: auto; overflow: visible; }
+.sole-raggi { fill: none; stroke: var(--oro); stroke-width: 1.3; stroke-linecap: round; vector-effect: non-scaling-stroke; }
+.sole-punto { fill: var(--oro); }
+
+.separatore {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin: 4px auto;
+  width: min(320px, 70%);
+}
+.separatore span { flex: 1; height: 1px; background: var(--filetto); }
+.separatore .sole { width: 28px; }
+
+/* angoli a L dell'etichetta prezzo */
+.angoli {
+  background-image: var(--angolo-tl), var(--angolo-tr), var(--angolo-br), var(--angolo-bl);
+  background-position: top left, top right, bottom right, bottom left;
+  background-size: 18px 18px;
+  background-repeat: no-repeat;
+}
+
+/* cornice a ottagono con filetto oro (angoli smussati a 45°) */
+.cornice {
+  --smusso: 14px;
+  position: relative;
+  isolation: isolate;
+  background: var(--oro);
+  clip-path: polygon(var(--smusso) 0, calc(100% - var(--smusso)) 0, 100% var(--smusso), 100% calc(100% - var(--smusso)),
+    calc(100% - var(--smusso)) 100%, var(--smusso) 100%, 0 calc(100% - var(--smusso)), 0 var(--smusso));
+}
+.cornice::before {
+  --s: calc(var(--smusso) - .41px);
+  content: '';
+  position: absolute;
+  inset: 1px;
+  z-index: -1;
+  background: var(--verde);
+  clip-path: polygon(var(--s) 0, calc(100% - var(--s)) 0, 100% var(--s), 100% calc(100% - var(--s)),
+    calc(100% - var(--s)) 100%, var(--s) 100%, 0 calc(100% - var(--s)), 0 var(--s));
+}
+
+/* ---------- testata ---------- */
+
+.tacca {
+  position: fixed;
+  z-index: 30;
+  inset: 0 0 auto;
+  height: env(safe-area-inset-top, 0px);
+  background: var(--verde);
+}
+
+.testata {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: calc(env(safe-area-inset-top, 0px) + 10px) var(--margine-d) 8px var(--margine);
+  background: var(--verde);
+  color: var(--panna);
+}
+.marchio { flex: none; border-radius: var(--raggio); }
+.marchio img { width: auto; height: 44px; }
+.testata-titolo { display: flex; flex-direction: column; min-width: 0; line-height: 1.1; }
+.titolo-app { font: 400 24px/1.1 var(--f-titoli); color: var(--panna); }
+.testata-nav { margin-left: auto; display: flex; gap: 4px; }
+.nav-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 10px;
+  font: 600 14px/1 var(--f-maiuscoletto);
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--panna);
+  border-bottom: 1px solid transparent;
+}
+.nav-link[aria-current="page"] { color: var(--oro); border-bottom-color: var(--oro); }
+.testata :focus-visible, .barra-ricerca :focus-visible, .barra-indietro :focus-visible { outline-color: var(--oro); }
+
+/* ---------- ricerca ---------- */
+
+.barra-ricerca {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 6px var(--margine-d) 12px var(--margine);
+  background: var(--verde);
+  border-bottom: 1px solid var(--oro);
+}
+.etichetta-campo { font-size: 13px; color: var(--oro); }
+.campo { position: relative; }
+.campo input {
+  width: 100%;
+  min-height: 48px;
+  padding: 10px 48px 10px 42px;
+  border: 1px solid var(--oro);
+  border-radius: var(--raggio);
+  background: var(--panna);
+  color: var(--verde);
+  font: 400 17px/1.3 var(--f-testo);
+  -webkit-appearance: none;
+  appearance: none;
+}
+.campo input::placeholder { color: #66776B; opacity: 1; }
+.campo input::-webkit-search-cancel-button { display: none; }
+.campo input:focus-visible { outline: 2px solid var(--oro); outline-offset: 2px; }
+.lente {
+  position: absolute;
+  left: 13px; top: 50%;
+  width: 20px; height: 20px;
+  transform: translateY(-50%);
+  fill: none; stroke: var(--verde); stroke-width: 1.8; stroke-linecap: round;
+  pointer-events: none;
+}
+.pulisci {
+  position: absolute;
+  right: 2px; top: 50%;
+  width: 44px; height: 44px;
+  display: grid; place-items: center;
+  transform: translateY(-50%);
+  border: 0; background: none; cursor: pointer;
+  border-radius: var(--raggio);
+}
+.pulisci svg { width: 18px; height: 18px; fill: none; stroke: var(--verde); stroke-width: 2; stroke-linecap: round; }
+.pulisci:focus-visible { outline-color: var(--verde); outline-offset: -4px; }
+.pulisci[hidden] { display: none; }
+
+.scorciatoie {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  padding: 12px var(--margine-d) 4px var(--margine);
+}
+.scorciatoie-etichetta { font-size: 13px; color: var(--accento); margin-right: 4px; }
+.scorciatoie button {
+  min-height: 44px;
+  padding: 0 14px;
+  border: 1px solid var(--filetto);
+  border-radius: 999px;
+  background: var(--superficie);
+  color: var(--inchiostro);
+  font-size: 15px;
+  cursor: pointer;
+}
+.scorciatoie button:active { background: var(--chip-bevanda-fondo); }
+
+.stato {
+  padding: 10px var(--margine-d) 6px var(--margine);
+  color: var(--tenue);
+  font-size: 14px;
+}
+
+.risultati { padding: 0 var(--margine-d) 12px var(--margine); }
+.risultati li + li { border-top: 1px solid var(--linea); }
+.risultato {
+  display: grid;
+  grid-template-columns: 14px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 4px 10px;
+  min-height: 56px;
+  padding: 8px 8px 8px 6px;
+  text-decoration: none;
+  border-left: 3px solid transparent;
+}
+.risultato:active { background: var(--chip-bevanda-fondo); }
+.risultato[aria-current="page"] { background: var(--superficie); border-left-color: var(--oro); }
+.risultato-testo { display: flex; flex-direction: column; min-width: 0; }
+.risultato-nome { font-weight: 600; font-size: 16px; line-height: 1.3; overflow-wrap: anywhere; }
+.risultato-marca { font-size: 14px; color: var(--tenue); }
+.risultato-prezzo { font-size: 15px; }
+.da-fare { color: var(--accento); font-style: italic; }
+
+/* segno cibo / bevanda: cerchio pieno = cibo, anello = bevanda */
+.segno { display: inline-block; flex: none; width: 12px; height: 12px; border-radius: 50%; }
+.segno-cibo { background: var(--accento); }
+.segno-bevanda { border: 2.5px solid var(--inchiostro); }
+
+.sfoglia { padding: 14px var(--margine-d) 24px var(--margine); }
+.sfoglia[hidden] { display: none; }
+.sfoglia-elenco { margin-top: 8px; }
+.sfoglia-elenco li + li { border-top: 1px solid var(--linea); }
+.sfoglia-voce {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 52px;
+  padding: 6px 4px;
+  text-decoration: none;
+}
+.sfoglia-nome { font: 400 18px/1.25 var(--f-titoli); }
+.sfoglia-conta { font-size: 14px; color: var(--tenue); }
+
+/* ---------- scheda ---------- */
+
+.barra-indietro {
+  display: none;
+  position: sticky;
+  z-index: 20;
+  top: env(safe-area-inset-top, 0px);
+  padding: 4px var(--margine-d) 4px var(--margine);
+  background: var(--verde);
+  border-bottom: 1px solid var(--oro);
+}
+.indietro {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 0 12px 0 4px;
+  color: var(--panna);
+  text-decoration: none;
+  font: 600 15px/1 var(--f-maiuscoletto);
+  letter-spacing: .2em;
+  text-transform: uppercase;
+}
+.indietro span { font-family: var(--f-testo); letter-spacing: 0; font-size: 20px; color: var(--oro); }
+
+.vista { padding: 16px var(--margine-d) 32px var(--margine); container: vista / inline-size; }
+.colonna-scheda:focus { outline: none; }
+
+.scheda { display: flex; flex-direction: column; gap: 20px; max-width: 1400px; margin: 0 auto; }
+
+.intestazione {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 22px 22px 20px;
+  background-color: var(--superficie);
+  border: 1px solid var(--linea);
+}
+.tipo { display: flex; align-items: center; gap: 8px; font-size: 14px; color: var(--accento); }
+.intestazione-riga { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 6px 24px; }
+.nome {
+  font: 500 clamp(28px, 7vw, 40px)/1.12 var(--f-titoli);
+  letter-spacing: -.005em;
+  text-wrap: balance;
+  overflow-wrap: anywhere;
+}
+.prezzo-riga { padding-bottom: 6px; border-bottom: 1px solid var(--oro); }
+.prezzo-grande { font: 600 24px/1 var(--f-testo); }
+.meta { color: var(--tenue); font-size: 15px; }
+.descrizione { font-size: 17px; max-width: 70ch; }
+.tilby { font-size: 13.5px; color: var(--tenue); overflow-wrap: anywhere; }
+
+.sezioni { display: grid; gap: 22px; }
+.sezione { display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.vuoto { color: var(--tenue); font-size: 15px; }
+
+.gruppo {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 12px 14px 14px;
+  background: var(--superficie);
+  border: 1px solid var(--linea);
+  border-left: 2px solid var(--oro);
+}
+.gruppo-titolo { font: 500 18px/1.25 var(--f-titoli); }
+.perche { font-size: 15.5px; line-height: 1.5; }
+.perche-etichetta { font-size: 13px; color: var(--accento); margin-right: 2px; }
+
+.gruppo-evitare {
+  background: var(--evitare-fondo);
+  border-color: var(--chip-evitare-bordo);
+  border-left: 2px dashed var(--accento);
+}
+.sezione-evitare > .etichetta { color: var(--accento); }
+.icona-evitare { width: 15px; height: 15px; fill: none; stroke: currentColor; stroke-width: 1.5; }
+.stili-evitare { font-size: 15px; font-weight: 600; }
+
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chips > li { max-width: 100%; }
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  max-width: 100%;
+  min-height: 44px;
+  padding: 7px 12px;
+  border: 1px solid var(--chip-cibo-bordo);
+  border-radius: var(--raggio);
+  background: var(--chip-cibo-fondo);
+  color: var(--inchiostro);
+  font-size: 15px;
+  line-height: 1.25;
+  text-decoration: none;
+}
+.chip-nome { min-width: 0; overflow-wrap: anywhere; }
+.chip-prezzo { font-size: 13.5px; color: var(--tenue); }
+.chip-prezzo.da-fare { color: var(--accento); }
+.chip-bevanda { background: var(--chip-bevanda-fondo); border-color: var(--chip-bevanda-bordo); }
+.chip-bevanda .chip-prezzo { color: var(--inchiostro); }
+.chip-evitare { background: var(--chip-evitare-fondo); border-color: var(--chip-evitare-bordo); }
+.chip-evitare .chip-prezzo { color: var(--inchiostro); }
+.chip:active { filter: brightness(.95); }
+
+.altri {
+  min-height: 44px;
+  padding: 0 14px;
+  border: 1px dashed var(--filetto);
+  border-radius: var(--raggio);
+  background: transparent;
+  color: var(--accento);
+  font-weight: 600;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+.extra { display: grid; gap: 22px; }
+
+.consigli { display: flex; flex-direction: column; gap: 8px; }
+.consigli li { display: flex; gap: 10px; align-items: baseline; font-size: 16px; }
+.sole-punto-elenco { width: 18px; flex: none; transform: translateY(2px); }
+
+.nota { font-size: 16px; max-width: 70ch; }
+
+.pillole { display: flex; flex-wrap: wrap; gap: 8px; }
+.pillola {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 16px;
+  border: 1px solid var(--oro);
+  border-radius: 999px;
+  background: var(--superficie);
+  text-decoration: none;
+  font-size: 15px;
+}
+
+/* kit: piccola targa verde con cornice a ottagono, come il logo */
+.kit {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 18px 22px 16px;
+  color: var(--panna);
+}
+.kit + .kit { margin-top: 8px; }
+.kit-testa { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 12px; }
+.kit-etichetta { font-size: 13px; color: var(--oro); }
+.kit-nome { font: 500 21px/1.2 var(--f-titoli); color: var(--panna); }
+.kit-famiglia {
+  margin-left: auto;
+  font-size: 14px;
+  color: var(--oro);
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+}
+.kit-voci { display: flex; flex-direction: column; }
+.kit-voce {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  border-top: 1px solid rgba(201, 169, 97, .35);
+}
+.kit-voce a {
+  display: flex;
+  gap: 8px;
+  align-items: baseline;
+  min-height: 44px;
+  padding: 10px 0;
+  min-width: 0;
+  color: var(--panna);
+  text-decoration-color: rgba(201, 169, 97, .6);
+  text-underline-offset: 3px;
+}
+.kit-voce.questo a { font-weight: 600; text-decoration: none; }
+.kit-quantita { color: var(--oro); font-variant-numeric: tabular-nums; flex: none; }
+.kit-prodotto { overflow-wrap: anywhere; }
+.kit-prezzo { font-size: 14px; color: var(--panna); opacity: .9; }
+.kit-prezzo.da-fare { color: var(--oro); }
+.kit-totale {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding-top: 10px;
+  border-top: 1px solid var(--oro);
+  font: 600 13px/1 var(--f-maiuscoletto);
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--oro);
+}
+.kit-prezzo-totale { font: 600 22px/1 var(--f-testo); letter-spacing: 0; color: var(--panna); }
+.kit :focus-visible { outline-color: var(--oro); }
+
+.piede { color: var(--tenue); font-size: 13.5px; max-width: 72ch; }
+
+/* indice famiglie */
+.griglia-famiglie { display: grid; gap: 12px; grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr)); }
+.carta-famiglia {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  height: 100%;
+  padding: 18px 18px 16px;
+  background: var(--superficie);
+  border: 1px solid var(--linea);
+  border-top: 2px solid var(--oro);
+  text-decoration: none;
+}
+.carta-nome { font: 500 21px/1.2 var(--f-titoli); }
+.carta-perche { font-size: 15px; }
+.carta-conta { margin-top: auto; font-size: 14px; color: var(--tenue); }
+
+/* benvenuto e stati vuoti */
+.benvenuto {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  max-width: 520px;
+  margin: 8vh auto 0;
+  text-align: center;
+}
+.sole-grande { width: 72px; }
+.benvenuto-titolo { font: 400 clamp(30px, 5vw, 42px)/1.15 var(--f-titoli); }
+.benvenuto p { font-size: 17px; }
+.benvenuto .piede { margin-top: 24px; font-size: 14px; }
+
+.noscript { padding: 24px; }
+
+/* prima che arrivino i dati */
+body:not(.pronto) .scorciatoie button { visibility: hidden; }
+
+/* ---------- iPhone: una colonna ---------- */
+
+@media (max-width: 767.98px) {
+  .barra-ricerca { position: sticky; z-index: 20; top: env(safe-area-inset-top, 0px); }
+  .testata-nav .nav-link[data-nav="ricerca"] { display: none; }
+
+  body[data-vista="ricerca"] .colonna-scheda { display: none; }
+  body:not([data-vista="ricerca"]) .colonna-ricerca { display: none; }
+  body:not([data-vista="ricerca"]) .barra-indietro { display: block; }
+
+  .intestazione { padding: 20px 18px 18px; }
+  .vista { padding-bottom: calc(32px + env(safe-area-inset-bottom, 0px)); }
+  .sfoglia { padding-bottom: calc(24px + env(safe-area-inset-bottom, 0px)); }
+}
+
+@media (max-width: 380px) {
+  .titolo-app { font-size: 21px; }
+  .marchio img { height: 40px; }
+}
+
+/* ---------- tablet: due colonne sempre visibili ---------- */
+
+@media (min-width: 768px) {
+  body {
+    height: 100vh;
+    height: 100dvh;
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr);
+    overflow: hidden;
+  }
+  .testata {
+    gap: 16px;
+    padding-top: calc(env(safe-area-inset-top, 0px) + 10px);
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--oro);
+  }
+  .marchio img { height: 60px; }
+  .titolo-app { font-size: 28px; }
+  .nav-link { font-size: 15px; padding: 0 14px; }
+  .scorciatoie { gap: 6px 5px; }
+  .scorciatoie-etichetta { flex-basis: 100%; }
+  .scorciatoie button { padding: 0 12px; font-size: 14.5px; }
+
+  .corpo {
+    display: grid;
+    grid-template-columns: var(--colonna) minmax(0, 1fr);
+    min-height: 0;
+  }
+  .colonna-ricerca, .colonna-scheda {
+    min-height: 0;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+  }
+  .colonna-ricerca {
+    border-right: 1px solid var(--filetto);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  .barra-ricerca {
+    position: sticky;
+    z-index: 5;
+    top: 0;
+    padding: 14px 16px 14px max(16px, env(safe-area-inset-left, 0px));
+    background: var(--fondo);
+    border-bottom: 1px solid var(--linea);
+  }
+  .etichetta-campo { color: var(--accento); }
+  .campo input { border-color: var(--filetto); background: var(--superficie); color: var(--inchiostro); }
+  .campo input:focus-visible { outline-color: var(--fuoco); }
+  .lente, .pulisci svg { stroke: var(--inchiostro); }
+  .campo input::placeholder { color: var(--tenue); }
+  .scorciatoie, .stato, .risultati, .sfoglia { padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: 16px; }
+
+  .colonna-scheda { background: var(--fondo); }
+  .vista { padding: 24px max(28px, env(safe-area-inset-right, 0px)) calc(32px + env(safe-area-inset-bottom, 0px)) 28px; }
+  .benvenuto { margin-top: 12vh; }
+}
+
+/* Sunmi 15,6" in orizzontale e iPad in orizzontale: colonna più larga */
+@media (min-width: 1100px) {
+  :root { --colonna: 360px; }
+}
+
+/* La scheda si dispone su due colonne quando c'è spazio (iPad orizzontale, Sunmi). */
+@container vista (min-width: 720px) {
+  .intestazione { padding: 24px 28px 22px; }
+  .sezioni {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    grid-template-rows: auto 1fr;
+    column-gap: 24px;
+    align-items: start;
+  }
+  .sezione-abbina { grid-column: 1; grid-row: 1 / span 2; }
+  .sezione-bevande { grid-column: 2; grid-row: 1; }
+  .sezione-evitare { grid-column: 2; grid-row: 2; }
+  .extra { grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); align-items: start; column-gap: 24px; }
+  .sezione-kit { grid-column: span 1; }
+}
+
+/* Sunmi 15,6": abbinamenti, bevande e da evitare affiancati, così la scheda sta quasi tutta nello schermo. */
+@container vista (min-width: 1250px) {
+  .sezioni { grid-template-columns: repeat(3, minmax(0, 1fr)); grid-template-rows: auto; }
+  .sezione-abbina, .sezione-bevande, .sezione-evitare { grid-column: auto; grid-row: auto; }
+}
+
+@container vista (min-width: 1100px) {
+  .intestazione {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    column-gap: 32px;
+  }
+  .intestazione > *, .intestazione .nome { grid-column: 1; }
+  .intestazione-riga { display: contents; }
+  .intestazione .prezzo-riga { grid-column: 2; grid-row: 1 / span 3; align-self: start; margin-top: 4px; }
+  .prezzo-grande { font-size: 30px; }
+}
+
+/* Prezzi a cifre tabellari. Sta in fondo perché la scorciatoia "font" azzera font-variant. */
+.risultato-prezzo, .chip-prezzo, .prezzo-grande, .kit-prezzo, .kit-prezzo-totale, .kit-quantita, .sfoglia-conta {
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+/* ---------- movimento ---------- */
+
+@media (prefers-reduced-motion: no-preference) {
+  .chip, .risultato, .scorciatoie button, .pillola, .carta-famiglia { transition: background-color .15s ease, border-color .15s ease; }
+}
+
+@media (hover: hover) {
+  .risultato:hover, .sfoglia-voce:hover { background: var(--superficie); }
+  .chip:hover, .pillola:hover, .carta-famiglia:hover, .scorciatoie button:hover { border-color: var(--oro); }
+}
